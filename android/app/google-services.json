@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "212630496582",
+    "firebase_url": "https://vs-chat-749ef.firebaseio.com",
+    "project_id": "vs-chat-749ef",
+    "storage_bucket": "vs-chat-749ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212630496582:android:217c25dd7d1e12c3853147",
+        "android_client_info": {
+          "package_name": "com.example.firebase_phone_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212630496582-8d5f3anv9ogp6fk84glh333p5f346lcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBzBgB5TYBnPnB2zsObGJjAbMxWXjoS3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212630496582-8d5f3anv9ogp6fk84glh333p5f346lcr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
