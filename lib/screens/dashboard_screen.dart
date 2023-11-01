@@ -3,6 +3,9 @@ import 'package:firebase_phone_auth/utils/styles.dart';
 import 'package:firebase_phone_auth/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
+import '../models/dashboard/service_model.dart';
+import 'DropDownScreens/drop_down_screen.dart';
+
 class DashboardScreen extends StatefulWidget {
   final String title;
 
@@ -13,35 +16,393 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   CustomTextStyle customTextStyle = CustomTextStyle();
+  List<DashboardItemsModel> gridItemsList = [];
+  int? _tabIndex=0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    gridItemsList.add(DashboardItemsModel(iconTransfer, "Transfer"));
+    gridItemsList.add(DashboardItemsModel(iconRequestMoneyTransfer, "Request Money Transfer"));
+    gridItemsList.add(DashboardItemsModel(iconManageGroupFriends, "Manage group of friends"));
+    gridItemsList.add(DashboardItemsModel(iconOrderFood, "Order food online"));
+    gridItemsList.add(DashboardItemsModel(iconGiveGift, "Give gift"));
+    gridItemsList.add(DashboardItemsModel(iconPaybill, "Pay bills"));
+    gridItemsList.add(DashboardItemsModel(iconBuyMovieTicket, "Buy movie tickets"));
+    gridItemsList.add(DashboardItemsModel(iconCustomerLoan, "Consumer Loans"));
+    gridItemsList.add(DashboardItemsModel(iconAllService, "All Services"));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return dashboardScreenUi(context);
+    dynamic _width = MediaQuery.of(context).size.width;
+    return dashboardScreenUi(context,_width);
   }
 
-  Widget dashboardScreenUi(BuildContext context) {
+  Widget dashboardScreenUi(BuildContext context,_width) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: whiteColor,
-        body: Container(
-          height: 400,
-          color: whiteColor,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(indiaCountryImage,height: MediaQuery.of(context).size.width,width: MediaQuery.of(context).size.width,),
-              Container(alignment: Alignment.center, padding: const EdgeInsets.all(30),child: Text("Welcome to triazine",style: customTextStyle.getTextStyleBold(fontSize: 20, fontColor: blackColor),)),
-              Flexible(child: Text("This will be your wonderful journey",style: customTextStyle.getTextStyleMedium(fontSize: 16, fontColor: greyColor),textAlign: TextAlign.center))
-            ],
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: listBottomNavigationBarItems(),
+            // currentIndex: _tabIndex!,
+            selectedItemColor: blackColor,
+            unselectedItemColor: greyColor.withOpacity(0.5),
+            // showUnselectedLabels: true,
+            // selectedFontSize: 12,
+            // unselectedFontSize: 12,
+            onTap: (int index) {
+              setState((){
+                _tabIndex = index;
+              });
+            },
           ),
-        )
-      ),
+          body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  color: shadowColor,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Column(
+                            children: [],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 100,
+                  color: darkGrayColor,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                        //  SearchDropDownScreen
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchDropDownScreen(dashboardItemsModelList: gridItemsList,)));
+
+                        },
+                        child: Icon(
+                          Icons.search,
+                          size: 28,
+                          color: whiteColor,
+                        ),
+                      ),
+                      const Spacer(),
+                      Image.asset(iconDeposit,
+                          width: 25, height: 25, color: whiteColor),
+                      const Spacer(),
+                      Image.asset(iconWithdraw,
+                          width: 25, height: 25, color: whiteColor),
+                      const Spacer(),
+                      Image.asset(iconQrCode,
+                          width: 22, height: 22, color: whiteColor),
+                      const Spacer(),
+                      Image.asset(iconScan,
+                          width: 25, height: 25, color: whiteColor),
+                      const Spacer(),
+                      Image.asset(iconbell,
+                          width: 25, height: 25, color: whiteColor),
+                      const Spacer(),
+                      Icon(Icons.power_settings_new_rounded,
+                          size: 28, color: whiteColor),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 70),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          iconDeposit,
+                                          height: 25,
+                                          width: 25,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Deposit",
+                                          style:
+                                              customTextStyle.getTextStyleRegular(
+                                                  fontSize: 13,
+                                                  fontColor: primaryColor),
+                                        )
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          iconWithdraw,
+                                          height: 25,
+                                          width: 25,
+                                          color: Colors.green,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Withdrawal",
+                                          style:
+                                              customTextStyle.getTextStyleRegular(
+                                                  fontSize: 13,
+                                                  fontColor: primaryColor),
+                                        )
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          iconQrCode,
+                                          height: 25,
+                                          width: 25,
+                                          color: orangeColor,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Pay Code",
+                                          style:
+                                              customTextStyle.getTextStyleRegular(
+                                                  fontSize: 13,
+                                                  fontColor: primaryColor),
+                                        )
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          iconScan,
+                                          height: 25,
+                                          width: 25,
+                                          color: purpleColor,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Scan Code",
+                                          style:
+                                              customTextStyle.getTextStyleRegular(
+                                                  fontSize: 13,
+                                                  fontColor: primaryColor),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Balance in the wallet",
+                                          style:
+                                              customTextStyle.getTextStyleRegular(
+                                                  fontSize: 13,
+                                                  fontColor: blackColor),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Image.asset(
+                                          iconEye,
+                                          height: 25,
+                                          width: 25,
+                                          color: greyColor,
+                                        ),
+                                      ],
+                                    )),
+                                    Text(
+                                      "\$ 40.000",
+                                      style: customTextStyle.getTextStyleSemiBold(
+                                          fontSize: 13, fontColor: blackColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(15),
+                          child: GridView.builder(
+                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: gridItemsList.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 1 / 1,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: dashboardGridItem(
+                                    gridItemsList[index].imagePath,
+                                    gridItemsList[index].title),
+                              );
+                            },
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 15),
+                          height: 80,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: List.generate(4, (index) {
+                              return Card(
+                                borderOnForeground: false,
+                                elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: Image.asset(iconSalesOf30,))
+                              );
+                            }),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(15),
+                          child: GridView.builder(
+                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: gridItemsList.length,
+                            gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 1 / 1,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: dashboardGridItem(
+                                    gridItemsList[index].imagePath,
+                                    gridItemsList[index].title),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )),
     );
   }
 
+  Widget dashboardGridItem(imagePath, title) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset(
+          imagePath,
+          height: 35,
+          width: 35,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: customTextStyle.getTextStyleRegular(
+              fontSize: 12, fontColor: greyColor),
+        )
+      ],
+    );
+  }
+
+  List<BottomNavigationBarItem> listBottomNavigationBarItems() {
+    List<BottomNavigationBarItem> itemsList = [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.paypal),
+        label: '',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.replay_sharp),
+        label: '',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.account_balance_rounded),
+        label: '',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.wallet),
+        label: '',
+      ),
+    ];
+
+    return itemsList;
+  }
 
 }
+
+

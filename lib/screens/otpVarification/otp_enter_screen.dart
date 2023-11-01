@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../utils/preferences.dart';
 import '../../utils/styles.dart';
 import '../../utils/text_styles.dart';
+import '../dashboard_screen.dart';
 
 class OTPEnterScreen extends StatefulWidget {
   final String verificationId;
@@ -66,7 +68,7 @@ class _OTPEnterScreenState extends State<OTPEnterScreen> {
                     UserCredential data = await auth.signInWithCredential(credential);
 
                     Preferences.setUserUid(data.user!.uid);
-                    print("User UId is: ${data.user!.uid}");
+                    print("User Uid is: ${data.user!.uid}");
 
                     setState(() {
                       canNavigateNow = true;
@@ -81,7 +83,13 @@ class _OTPEnterScreenState extends State<OTPEnterScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () async {
-
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardScreen(title: "Dashboard")),
+                            (Route<dynamic> routes)=>false
+                    ).then((value){
+                      SystemNavigator.pop();
+                    });
                   },
                   child: Container(
                     height: 50,

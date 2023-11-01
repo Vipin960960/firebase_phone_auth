@@ -27,6 +27,7 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
   List<Widget> carouselItems = [];
 
   CustomTextStyle customTextStyle = CustomTextStyle();
+  bool hideNextButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +87,6 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                         if (mobileNumber.toString().length == 10) {
                           if (_formKey.currentState!.validate()) {
                             FocusManager.instance.primaryFocus?.unfocus();
-
-
-
                           }
                         }
                       },
@@ -110,16 +108,6 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                         });
                       }
                     ),
-                    // Radio(
-                    //   activeColor: Colors.black,
-                    //   value: 1,
-                    //   groupValue: groupValue,
-                    //   onChanged: (dynamic value) {
-                    //     setState(() {
-                    //       groupValue = value;
-                    //     });
-                    //   },
-                    // ),
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0,20,0,20),
@@ -152,20 +140,23 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () async {
-                      // if(groupValue){
-                      await FirebaseAuth.instance.verifyPhoneNumber(
-                        phoneNumber: '+91${_mobileNumberController.text}',
-                        verificationCompleted: (PhoneAuthCredential credential) {},
-                        verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verificationId, int? resendToken) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OTPEnterScreen(verificationId: verificationId,)));
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {},
-                      );
-                      // }
+                      if(!hideNextButton){
+                        hideNextButton = true;
+                        setState(() {});
+
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: '+91${_mobileNumberController.text}',
+                          verificationCompleted: (PhoneAuthCredential credential) {},
+                          verificationFailed: (FirebaseAuthException e) {},
+                          codeSent: (String verificationId, int? resendToken) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OTPEnterScreen(verificationId: verificationId,)));
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {},
+                        );
+                      }
                     },
                     child: Container(
                       height: 50,
@@ -173,7 +164,7 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                       margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          color: groupValue?blackColor:greyColor
+                          color: groupValue||!hideNextButton?blackColor:greyColor
                       ),
                       child: Center(child: Text("NEXT",style: customTextStyle.getTextStyleRegular(fontSize: 20, fontColor: whiteColor),)),
                     ),

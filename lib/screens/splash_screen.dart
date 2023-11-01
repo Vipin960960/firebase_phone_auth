@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../utils/assetsUrl.dart';
 import '../utils/preference_utils.dart';
 import '../utils/preferences.dart';
 import 'dashboard_screen.dart';
+import 'otpVarification/carousel_screen.dart';
 import 'otpVarification/otp_enter_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,23 +24,25 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     PreferenceUtils.init();
-    // Preferences.setUserUid("Hello");
     Future.delayed(const Duration(seconds: 2)).then((value){
       if(Preferences.getUserUid()==""){
-        print("If ${Preferences.getUserUid()}");
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3")),
+            MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
                 (Route<dynamic> routes)=>false
-        );
-                // builder: (context) => CarouselScreen(title: "Carousel"))
+        ).then((value){
+          SystemNavigator.pop();
+        });
+        // builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3"))
+        // builder: (context) => CarouselScreen(title: "Carousel"))
       }else{
-        print("Else ${Preferences.getUserUid()}");
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => DashboardScreen(title: "Dashboard")),
                 (Route<dynamic> routes)=>false
-        );
+        ).then((value){
+          SystemNavigator.pop();
+        });
       }
     });
   }
@@ -46,8 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Image.asset(rocketLaunch)
-    );
+    return Image.asset(rocketLaunch);
   }
 }
