@@ -136,13 +136,18 @@ class _OTPEnterScreenState extends State<OTPEnterScreen> {
                 ],),
             ),
 
-            Text("Change phone number",style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.w400,
-                  color: primaryColor,
-                  decoration: TextDecoration.underline,
-              ),),
+            GestureDetector(
+              onTap: (){
+                Navigator.of(context).pop("ChangeTxt");
+              },
+              child: Text("Change phone number",style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w400,
+                    color: primaryColor,
+                    decoration: TextDecoration.underline,
+                ),),
+            ),
           ],
         )
       ),

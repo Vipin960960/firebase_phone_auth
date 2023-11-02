@@ -75,7 +75,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                             },
                             child: SizedBox(
                               height: 50,
-                              child: Center(child: Text("REGISTER",style: customTextStyle.getTextStyleRegular(fontSize: 20, fontColor: blackColor),)),
+                              child: Center(child: Text("REGISTER",style: customTextStyle.getTextStyleMedium(fontSize: 20, fontColor: blackColor),)),
                             ),
                           ),
                         ),
@@ -93,7 +93,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                                 borderRadius: BorderRadius.circular(40),
                                 color: blackColor
                               ),
-                              child: Center(child: Text("LOGIN",style: customTextStyle.getTextStyleRegular(fontSize: 20, fontColor: whiteColor),)),
+                              child: Center(child: Text("LOGIN",style: customTextStyle.getTextStyleMedium(fontSize: 20, fontColor: whiteColor),)),
                             ),
                           ),
                         ),

@@ -28,14 +28,14 @@ class _SplashScreenState extends State<SplashScreen> {
       if(Preferences.getUserUid()==""){
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
+            MaterialPageRoute(builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3")),
                 (Route<dynamic> routes)=>false
         ).then((value){
           SystemNavigator.pop();
         });
 
-        // builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3"))
-        // builder: (context) => CarouselScreen(title: "Carousel"))
+        // builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3")),
+        // builder: (context) => CarouselScreen(title: "Carousel")),
       }else{
         Navigator.pushAndRemoveUntil(
             context,
