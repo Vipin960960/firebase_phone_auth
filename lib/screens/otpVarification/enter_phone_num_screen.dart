@@ -164,7 +164,7 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                       margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          color: groupValue||!hideNextButton?blackColor:greyColor
+                          color: !hideNextButton?blackColor:greyColor
                       ),
                       child: Center(child: Text("NEXT",style: customTextStyle.getTextStyleRegular(fontSize: 20, fontColor: whiteColor),)),
                     ),

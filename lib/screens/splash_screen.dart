@@ -33,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ).then((value){
           SystemNavigator.pop();
         });
+
         // builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3"))
         // builder: (context) => CarouselScreen(title: "Carousel"))
       }else{

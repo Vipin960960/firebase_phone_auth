@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth/utils/assetsUrl.dart';
+import 'package:firebase_phone_auth/utils/preference_utils.dart';
 import 'package:firebase_phone_auth/utils/styles.dart';
 import 'package:firebase_phone_auth/utils/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/dashboard/service_model.dart';
 import 'DropDownScreens/drop_down_screen.dart';
+import 'otpVarification/carousel_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String title;
@@ -38,10 +42,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     dynamic _width = MediaQuery.of(context).size.width;
-    return dashboardScreenUi(context,_width);
+    dynamic _height = MediaQuery.of(context).size.height;
+    return dashboardScreenUi(context,_width,_height);
   }
 
-  Widget dashboardScreenUi(BuildContext context,_width) {
+  Widget dashboardScreenUi(BuildContext context,_width,_height) {
     return SafeArea(
       child: Scaffold(
           bottomNavigationBar: BottomNavigationBar(
@@ -67,18 +72,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Stack(
               children: [
                 Container(
+                  height: _height,
                   color: shadowColor,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Column(
-                            children: [],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
                 ),
                 Container(
                   height: 100,
@@ -122,8 +117,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Image.asset(iconbell,
                           width: 25, height: 25, color: whiteColor),
                       const Spacer(),
-                      Icon(Icons.power_settings_new_rounded,
-                          size: 28, color: whiteColor),
+                      GestureDetector(
+                        onTap: (){
+                          FirebaseAuth.instance.signOut();
+                          PreferenceUtils.clear();
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
+                                  (Route<dynamic> routes)=>false
+                          ).then((value){
+                            SystemNavigator.pop();
+                          });
+                        },
+                        child: Icon(Icons.power_settings_new_rounded,
+                            size: 28, color: whiteColor),
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
