@@ -24,9 +24,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<DashboardItemsModel> gridItemsList = [];
   int? _tabIndex=0;
 
+  final ScrollController _controller = ScrollController();
+  bool _isVisible = true;
+
   @override
   void initState() {
     super.initState();
+
+    _controller.addListener(() {
+      if (_controller.position.pixels == 0) {
+        setState(() {
+          _isVisible = true;
+        });
+      } else if (_controller.position.pixels>50) {
+        setState(() {
+          _isVisible = false;
+        });
+      }
+    });
 
     gridItemsList.add(DashboardItemsModel(iconTransfer, "Transfer"));
     gridItemsList.add(DashboardItemsModel(iconRequestMoneyTransfer, "Request Money Transfer"));
@@ -55,9 +70,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // currentIndex: _tabIndex!,
             selectedItemColor: blackColor,
             unselectedItemColor: greyColor.withOpacity(0.5),
-            // showUnselectedLabels: true,
-            // selectedFontSize: 12,
-            // unselectedFontSize: 12,
             onTap: (int index) {
               setState((){
                 _tabIndex = index;
@@ -65,94 +77,99 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           ),
           body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  height: _height,
-                  color: shadowColor,
-                ),
-                Container(
-                  height: 100,
-                  color: darkGrayColor,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                        //  SearchDropDownScreen
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchDropDownScreen(dashboardItemsModelList: gridItemsList,)));
-
-                        },
-                        child: Icon(
-                          Icons.search,
-                          size: 28,
-                          color: whiteColor,
-                        ),
-                      ),
-                      const Spacer(),
-                      Image.asset(iconDeposit,
-                          width: 25, height: 25, color: whiteColor),
-                      const Spacer(),
-                      Image.asset(iconWithdraw,
-                          width: 25, height: 25, color: whiteColor),
-                      const Spacer(),
-                      Image.asset(iconQrCode,
-                          width: 22, height: 22, color: whiteColor),
-                      const Spacer(),
-                      Image.asset(iconScan,
-                          width: 25, height: 25, color: whiteColor),
-                      const Spacer(),
-                      Image.asset(iconbell,
-                          width: 25, height: 25, color: whiteColor),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: (){
-                          FirebaseAuth.instance.signOut();
-                          PreferenceUtils.clear();
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
-                                  (Route<dynamic> routes)=>false
-                          ).then((value){
-                            SystemNavigator.pop();
-                          });
-                        },
-                        child: Icon(Icons.power_settings_new_rounded,
-                            size: 28, color: whiteColor),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    height: _height,
+                    color: shadowColor,
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 70),
-                  child: SingleChildScrollView(
+                  Container(
+                    height: 100,
+                    color: darkGrayColor,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchDropDownScreen(dashboardItemsModelList: gridItemsList,)));
+
+                          },
+                          child: Icon(
+                            Icons.search,
+                            size: 28,
+                            color: whiteColor,
+                          ),
+                        ),
+                        (!_isVisible)
+                            ?
+                          Expanded(child: Row(children: [
+                            const Spacer(),
+                            Image.asset(iconDeposit,
+                                width: 25, height: 25, color: whiteColor),
+                            const Spacer(),
+                            Image.asset(iconWithdraw,
+                                width: 25, height: 25, color: whiteColor),
+                            const Spacer(),
+                            Image.asset(iconQrCode,
+                                width: 22, height: 22, color: whiteColor),
+                            const Spacer(),
+                            Image.asset(iconScan,
+                                width: 25, height: 25, color: whiteColor),
+                            const Spacer(),
+                            Image.asset(iconbell,
+                                width: 25, height: 25, color: whiteColor),
+                            const Spacer(),
+                          ],))
+                            :
+                        Expanded(child: Text("  Search",style: customTextStyle.getTextStyleMedium(fontSize: 18, fontColor: greyColor),)),
+                        GestureDetector(
+                          onTap: (){
+                            FirebaseAuth.instance.signOut();
+                            PreferenceUtils.clear();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
+                                    (Route<dynamic> routes)=>false
+                            ).then((value){
+                              SystemNavigator.pop();
+                            });
+                          },
+                          child: Icon(Icons.power_settings_new_rounded,
+                              size: 28, color: whiteColor),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 70),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          margin: const EdgeInsets.fromLTRB(15, 0, 15, 5),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: whiteColor,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                           child: Column(
                             children: [
+                              if(_isVisible)
                               Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Row(
@@ -171,9 +188,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Text(
                                           "Deposit",
                                           style:
-                                              customTextStyle.getTextStyleRegular(
+                                              customTextStyle.getTextStyleMedium(
                                                   fontSize: 13,
-                                                  fontColor: primaryColor),
+                                                  fontColor: blueColor),
                                         )
                                       ],
                                     ),
@@ -193,9 +210,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Text(
                                           "Withdrawal",
                                           style:
-                                              customTextStyle.getTextStyleRegular(
+                                              customTextStyle.getTextStyleMedium(
                                                   fontSize: 13,
-                                                  fontColor: primaryColor),
+                                                  fontColor: blueColor),
                                         )
                                       ],
                                     ),
@@ -215,9 +232,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Text(
                                           "Pay Code",
                                           style:
-                                              customTextStyle.getTextStyleRegular(
+                                              customTextStyle.getTextStyleMedium(
                                                   fontSize: 13,
-                                                  fontColor: primaryColor),
+                                                  fontColor: blueColor),
                                         )
                                       ],
                                     ),
@@ -237,9 +254,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Text(
                                           "Scan Code",
                                           style:
-                                              customTextStyle.getTextStyleRegular(
+                                              customTextStyle.getTextStyleMedium(
                                                   fontSize: 13,
-                                                  fontColor: primaryColor),
+                                                  fontColor: blueColor),
                                         )
                                       ],
                                     ),
@@ -257,7 +274,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         Text(
                                           "Balance in the wallet",
                                           style:
-                                              customTextStyle.getTextStyleRegular(
+                                              customTextStyle.getTextStyleMedium(
                                                   fontSize: 13,
                                                   fontColor: blackColor),
                                         ),
@@ -274,7 +291,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     )),
                                     Text(
                                       "\$ 40.000",
-                                      style: customTextStyle.getTextStyleSemiBold(
+                                      style: customTextStyle.getTextStyleBold(
                                           fontSize: 13, fontColor: blackColor),
                                     )
                                   ],
@@ -283,86 +300,105 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(15),
-                          child: GridView.builder(
-                            padding: const EdgeInsets.only(top: 10, bottom: 5),
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: gridItemsList.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    childAspectRatio: 1 / 1,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: dashboardGridItem(
-                                    gridItemsList[index].imagePath,
-                                    gridItemsList[index].title),
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 15),
-                          height: 80,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: List.generate(4, (index) {
-                              return Card(
-                                borderOnForeground: false,
-                                elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
+                        Expanded(
+                          child: CustomScrollView(
+                            controller: _controller,
+                            slivers: <Widget>[
+                              SliverPadding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+                                sliver: SliverList(
+                                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                                      if(index==0){
+                                        return Container(
+                                          padding: const EdgeInsets.all(15),
+                                          child: GridView.builder(
+                                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: gridItemsList.length,
+                                            gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                childAspectRatio: 1 / 1,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 10),
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                padding: const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    color: whiteColor,
+                                                    borderRadius: BorderRadius.circular(20)),
+                                                child: dashboardGridItem(
+                                                    gridItemsList[index].imagePath,
+                                                    gridItemsList[index].title),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }else if(index==1){
+                                        return Container(
+                                          padding: const EdgeInsets.only(left: 15),
+                                          height: 80,
+                                          child: ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: List.generate(4, (index) {
+                                              return Card(
+                                                  borderOnForeground: false,
+                                                  elevation: 0,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(20.0),
+                                                  ),
+                                                  child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      child: Image.asset(iconSalesOf30,))
+                                              );
+                                            }),
+                                          ),
+                                        );
+                                      }else if(index ==2){
+                                        return Container(
+                                          padding: const EdgeInsets.all(15),
+                                          child: GridView.builder(
+                                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: gridItemsList.length,
+                                            gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                childAspectRatio: 1 / 1,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 10),
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                padding: const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    color: whiteColor,
+                                                    borderRadius: BorderRadius.circular(20)),
+                                                child: dashboardGridItem(
+                                                    gridItemsList[index].imagePath,
+                                                    gridItemsList[index].title),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    childCount: 3,
                                   ),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(iconSalesOf30,))
-                              );
-                            }),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(15),
-                          child: GridView.builder(
-                            padding: const EdgeInsets.only(top: 10, bottom: 5),
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: gridItemsList.length,
-                            gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 1 / 1,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: dashboardGridItem(
-                                    gridItemsList[index].imagePath,
-                                    gridItemsList[index].title),
-                              );
-                            },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      )),
+          ],
+        )),
     );
   }
 

@@ -1,13 +1,10 @@
-
+import 'package:firebase_phone_auth/screens/otpVarification/carousel_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../utils/assetsUrl.dart';
 import '../utils/preference_utils.dart';
 import '../utils/preferences.dart';
 import 'dashboard_screen.dart';
-import 'otpVarification/carousel_screen.dart';
-import 'otpVarification/otp_enter_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.title});
@@ -28,14 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
       if(Preferences.getUserUid()==""){
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3")),
+            MaterialPageRoute(builder: (context) => CarouselScreen(title: "Carousel")),
                 (Route<dynamic> routes)=>false
         ).then((value){
           SystemNavigator.pop();
         });
-
-        // builder: (context) => OTPEnterScreen(verificationId: "29j9je9je939ej39e3")),
-        // builder: (context) => CarouselScreen(title: "Carousel")),
       }else{
         Navigator.pushAndRemoveUntil(
             context,

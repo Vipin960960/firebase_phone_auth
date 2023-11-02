@@ -23,7 +23,7 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
   final _mobileNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  bool groupValue = true;
+  bool acceptTermAndCondition = false;
   bool rValue = true;
   List<Widget> carouselItems = [];
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -127,16 +127,32 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    Radio(
-                        activeColor: Colors.black,
-                        value: rValue,
-                        groupValue: groupValue,
-                        onChanged: (value) {
-                          print(!rValue);
-                          setState(() {
-                            groupValue = !rValue;
-                          });
-                        }),
+                    GestureDetector(
+                      onTap:(){
+                        setState((){
+                          acceptTermAndCondition = !acceptTermAndCondition;
+                        });
+                      },
+                      child: Container(
+                        height: 18,
+                        width: 18,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: blackColor,width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: acceptTermAndCondition?Container(
+                          height: 15,
+                          width: 15,
+                          margin: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: blackColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ):SizedBox(),
+                      ),
+                    ),
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -171,17 +187,31 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
               Row(
                 children: [
                   const Spacer(),
+                  !acceptTermAndCondition && !hideNextButton
+                      ?
+                  Container(
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(35, 5, 35, 5),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: greyColor),
+                    child: Center(
+                        child: Text(
+                          "NEXT",
+                          style: customTextStyle.getTextStyleRegular(
+                              fontSize: 20, fontColor: whiteColor),
+                        )),
+                  )
+                      :
                   GestureDetector(
                     onTap: () async {
-                      // if (!hideNextButton) {
-                      //   hideNextButton = true;
-                      //   setState(() {});
+                      if (!hideNextButton && _mobileNumberController.text.length>9) {
+                        hideNextButton = true;
+                        setState(() {});
                         await FirebaseAuth.instance.verifyPhoneNumber(
                           phoneNumber: '+91${_mobileNumberController.text}',
-                          verificationCompleted: (PhoneAuthCredential credential) async {
-                            UserCredential data = await auth.signInWithCredential(credential);
-                            print("User Uid is: ${data.user!.uid}");
-                          },
+                          verificationCompleted: (PhoneAuthCredential credential) async {},
                           verificationFailed: (FirebaseAuthException e) async {
                             commonMethods.showErrorDialog(context,e.message);
                           },
@@ -194,12 +224,15 @@ class _EnterPhoneNumScreenState extends State<EnterPhoneNumScreen> {
                                         ))).then((value) {
                               if (value != null) {
                                 _mobileNumberController.text = "";
+                                setState((){
+                                  hideNextButton = false;
+                                });
                               }
                             });
                           },
                           codeAutoRetrievalTimeout: (String verificationId) {},
                         );
-                      // }
+                      }
                     },
                     child: Container(
                       height: 50,

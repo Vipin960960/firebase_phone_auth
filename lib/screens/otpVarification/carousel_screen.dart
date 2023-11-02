@@ -1,3 +1,4 @@
+import 'package:firebase_phone_auth/screens/dashboard_screen.dart';
 import 'package:firebase_phone_auth/utils/assetsUrl.dart';
 import 'package:firebase_phone_auth/utils/styles.dart';
 import 'package:firebase_phone_auth/utils/text_styles.dart';
@@ -71,11 +72,11 @@ class _CarouselScreenState extends State<CarouselScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => EnterPhoneNumScreen(title: "Enter Phone")));
+                                      builder: (context) => DashboardScreen(title: "Enter Phone")));
                             },
                             child: SizedBox(
                               height: 50,
-                              child: Center(child: Text("REGISTER",style: customTextStyle.getTextStyleMedium(fontSize: 20, fontColor: blackColor),)),
+                              child: Center(child: Text("Dashboard",style: customTextStyle.getTextStyleMedium(fontSize: 20, fontColor: blackColor),)),
                             ),
                           ),
                         ),
